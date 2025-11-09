@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Biblioteca</title>
+  <link rel="stylesheet" href="css/style_acervo.css">
+</head>
+<body>
+  <div class="livros-container">
+    <div class="overlay">
+      <button onclick="logout()" class="logout" >Sair</button>
+      <h1>Biblioteca Escolar</h1>
+
+      
+      <!-- Cadastro - Só admins -->
+      <div id="cadastro" class="cadastro-box" style="display: none;">
+        <img src="https://cdn-icons-png.flaticon.com/512/29/29302.png" alt="Cadastro" style="width: 50px; display:block; margin: 10px auto;">
+        <h2>Cadastrar Livro</h2>
+        <form onsubmit="cadastrarLivro(); return false;">
+          <input type="text" id="titulo" placeholder="Título" required>
+          <input type="text" id="autor" placeholder="Autor" required>
+          <textarea id="resumo" placeholder="Resumo" required></textarea>
+          <input type="number" id="exemplares" placeholder="Nº de Exemplares" required>
+          <input type="text" id="imagem" placeholder="URL da Imagem (opcional)">
+          <button type="submit">Cadastrar</button></form>
+        </div>
+  
+        <!-- Busca e Lista -->
+        <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" alt="Buscar" style="width: 40px; display:block; margin: 10px auto;">
+        <input type="text" id="busca" placeholder="Buscar título..." oninput="listarLivros()">
+        <div id="listaLivros" class="livros-lista"></div>
+      </div>
+    </div>
+  
+    <script src="js/script_acervo.js"></script>
+  </body>
+  </html>

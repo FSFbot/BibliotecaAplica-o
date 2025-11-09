@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Biblioteca</title>
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <h2>Bem-vindo à Biblioteca</h2>
+      <form onsubmit="login(); return false;">
+        <input type="text" id="usuario" placeholder="Usuário" required>
+        <input type="password" id="senha" placeholder="Senha" required>
+        <button type="submit">Entrar</button>
+        <p id="erro"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      const usuario = document.getElementById('usuario').value;
+      const senha = document.getElementById('senha').value;
+
+      const users = [
+        { usuario: 'admin', senha: 'admin123', tipo: 'admin' },
+        { usuario: 'user', senha: 'user123', tipo: 'usuario' }
+      ];
+
+      const user = users.find(u => u.usuario === usuario && u.senha === senha);
+
+      if (user) {
+        localStorage.setItem('usuarioLogado', JSON.stringify(user));
+        window.location.href = 'index_acervo.html';
+    } else {
+        document.getElementById('erro').textContent = 'Usuário ou senha inválidos.';
+      }
+    }
+  </script>
+
+  <footer>
+    <p>&copy; 2025 Biblioteca Escolar - Todos os direitos reservados.</p>
+  </footer>
+
+</body>
+</html>

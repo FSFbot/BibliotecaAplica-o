@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contato - Biblioteca</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+
+    .form-side {
+      flex: 1;
+      padding: 40px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .image-side {
+      flex: 1;
+      background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac');
+      background-size: cover;
+      background-position: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .estrelas span {
+      font-size: 30px;
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .estrelas span.selecionada {
+      color: gold;
+    }
+
+    .avaliacoes {
+      margin-top: 30px;
+    }
+
+    .avaliacoes li {
+      background: #ecf0f1;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .image-side {
+        height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-side">
+      <h1>Fale Conosco</h1>
+      <input type="text" id="nome" placeholder="Seu nome" />
+      <input type="email" id="email" placeholder="Seu e-mail" />
+      <textarea id="mensagem" rows="5" placeholder="Mensagem..."></textarea>
+
+      <div class="estrelas" id="avaliacao">
+        Avaliação:
+        <span data-estrela="1">&#9733;</span>
+        <span data-estrela="2">&#9733;</span>
+        <span data-estrela="3">&#9733;</span>
+        <span data-estrela="4">&#9733;</span>
+        <span data-estrela="5">&#9733;</span>
+      </div>
+
+      <button onclick="enviarContato()">Enviar</button>
+
+      <div class="avaliacoes">
+        <h2>Avaliações</h2>
+        <ul id="avaliacoes"></ul>
+      </div>
+    </div>
+    <div class="image-side"></div>
+  </div>
+
+  <script>
+    let nota = 0;
+
+    // Estrelas
+    document.querySelectorAll('.estrelas span').forEach(span => {
+      span.addEventListener('click', () => {
+        nota = parseInt(span.dataset.estrela);
+        document.querySelectorAll('.estrelas span').forEach(s => s.classList.remove('selecionada'));
+        for (let i = 0; i < nota; i++) {
+          document.querySelectorAll('.estrelas span')[i].classList.add('selecionada');
+        }
+      });
+    });
+
+    function enviarContato() {
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const mensagem = document.getElementById('mensagem').value;
+
+      if (!nome || !email || !mensagem || nota === 0) {
+        alert('Preencha todos os campos e selecione uma nota!');
+        return;
+      }
+
+      const contato = { nome, email, mensagem, nota };
+
+      const lista = JSON.parse(localStorage.getItem('avaliacoes') || '[]');
+      lista.push(contato);
+      localStorage.setItem('avaliacoes', JSON.stringify(lista));
+      mostrarAvaliacoes();
+      document.getElementById('nome').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('mensagem').value = '';
+      nota = 0;
+      document.querySelectorAll('.estrelas span').forEach(s => s.classList.remove('selecionada'));
+    }
+
+    function mostrarAvaliacoes() {
+      const lista = JSON.parse(localStorage.getItem('avaliacoes') || '[]');
+      const ul = document.getElementById('avaliacoes');
+      ul.innerHTML = '';
+      lista.forEach(av => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${av.nome}</strong> (${av.nota} ⭐): ${av.mensagem}`;
+        ul.appendChild(li);
+      });
+    }
+
+    mostrarAvaliacoes();
+  </script>
+
+  <footer>
+    <p>&copy; 2025 Biblioteca Escolar - Todos os direitos reservados.</p>
+  </footer>
+
+</body>
+</html>

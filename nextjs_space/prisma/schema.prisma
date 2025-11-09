@@ -1,0 +1,94 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/biblioteca_app/nextjs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// NextAuth.js Models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Library Management Models
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  role          Int       @default(2) // 1 = admin, 2 = regular user
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // NextAuth relations
+  accounts      Account[]
+  sessions      Session[]
+  
+  // Library relations
+  loans         Loan[]
+}
+
+model Book {
+  id              String   @id @default(cuid())
+  title           String
+  author          String
+  description     String
+  cover_image_url String?
+  total_copies    Int      @default(4)
+  available_copies Int     @default(4)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  loans           Loan[]
+}
+
+model Loan {
+  id              String   @id @default(cuid())
+  userId          String
+  bookId          String
+  loan_date       DateTime @default(now())
+  return_deadline DateTime
+  returned        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book            Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+}
