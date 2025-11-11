@@ -1,10 +1,17 @@
 import NextAuth from 'next-auth'
-import { authOptions } from './auth-options'
 
-// Force dynamic rendering and disable static optimization
-export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
+// Lazy load authOptions to prevent build-time database connection
+const getHandler = async () => {
+  const { authOptions } = await import('./auth-options')  // ✅ Importado em runtime
+  return NextAuth(authOptions)
+}
 
-const handler = NextAuth(authOptions)
+export async function GET(req: Request, context: any) {
+  const handler = await getHandler()
+  return handler(req, context)
+}
 
-export { handler as GET, handler as POST }
+export async function POST(req: Request, context: any) {
+  const handler = await getHandler()
+  return handler(req, context)
+}
