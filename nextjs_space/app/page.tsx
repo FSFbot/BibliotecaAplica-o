@@ -1,18 +1,8 @@
-
-import { getServerSession } from 'next-auth/next'
-import { redirect } from 'next/navigation'
-import { authOptions } from './api/auth/[...nextauth]/auth-options'
 import Link from 'next/link'
 import { BookOpen, Users, Clock, Star } from 'lucide-react'
 import Image from 'next/image'
 
-export default async function Home() {
-  const session = await getServerSession(authOptions)
-  
-  if (session) {
-    redirect('/catalogo')
-  }
-
+export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
