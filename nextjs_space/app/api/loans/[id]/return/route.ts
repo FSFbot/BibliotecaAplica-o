@@ -1,16 +1,18 @@
 
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '../../../auth/[...nextauth]/auth-options'
 import { prisma } from '@/lib/db'
 
 export const dynamic = "force-dynamic"
+export const runtime = 'nodejs'
+export const fetchCache = 'force-no-store'
 
 export async function POST(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
+    const { authOptions } = await import('../../../auth/[...nextauth]/auth-options')
     const session = await getServerSession(authOptions)
 
     if (!session?.user) {

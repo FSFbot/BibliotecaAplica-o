@@ -1,7 +1,6 @@
 
 import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
-import { authOptions } from '../../api/auth/[...nextauth]/auth-options'
 import { prisma } from '@/lib/db'
 import Navigation from '@/components/navigation'
 import Link from 'next/link'
@@ -9,8 +8,10 @@ import { Plus, BookOpen } from 'lucide-react'
 import BooksList from './_components/books-list'
 
 export const dynamic = "force-dynamic"
+export const runtime = 'nodejs'
 
 export default async function AdminBooks() {
+  const { authOptions } = await import('../../api/auth/[...nextauth]/auth-options')
   const session = await getServerSession(authOptions)
   
   if (!session?.user) {

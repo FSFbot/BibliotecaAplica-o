@@ -1,13 +1,13 @@
 
 import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
-import { authOptions } from '../../../../api/auth/[...nextauth]/auth-options'
 import { prisma } from '@/lib/db'
 import Navigation from '@/components/navigation'
 import BookForm from '../../_components/book-form'
 import { Edit } from 'lucide-react'
 
 export const dynamic = "force-dynamic"
+export const runtime = 'nodejs'
 
 interface EditBookProps {
   params: {
@@ -16,6 +16,7 @@ interface EditBookProps {
 }
 
 export default async function EditBook({ params }: EditBookProps) {
+  const { authOptions } = await import('../../../../api/auth/[...nextauth]/auth-options')
   const session = await getServerSession(authOptions)
   
   if (!session?.user) {

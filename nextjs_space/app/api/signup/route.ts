@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/db'
 
 export const dynamic = "force-dynamic"
+export const runtime = 'nodejs'
+export const fetchCache = 'force-no-store'
 
 export async function POST(request: Request) {
   try {

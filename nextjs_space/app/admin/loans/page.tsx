@@ -1,15 +1,16 @@
 
 import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
-import { authOptions } from '../../api/auth/[...nextauth]/auth-options'
 import { prisma } from '@/lib/db'
 import Navigation from '@/components/navigation'
 import AdminLoansList from './_components/admin-loans-list'
 import { Users } from 'lucide-react'
 
 export const dynamic = "force-dynamic"
+export const runtime = 'nodejs'
 
 export default async function AdminLoans() {
+  const { authOptions } = await import('../../api/auth/[...nextauth]/auth-options')
   const session = await getServerSession(authOptions)
   
   if (!session?.user) {
