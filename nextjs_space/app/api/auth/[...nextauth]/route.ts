@@ -1,8 +1,9 @@
-
 import NextAuth from 'next-auth'
 import { authOptions } from './auth-options'
 
-export const dynamic = "force-dynamic"
+// Force dynamic rendering and disable static optimization
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 const handler = NextAuth(authOptions)
 
